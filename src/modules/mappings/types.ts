@@ -13,6 +13,7 @@ export type MappingRequestUrlMatchType =
     | 'urlPathPattern'
     | 'anyUrl'
     | 'urlPath'
+    | 'urlPathTemplate'
 
 export type MappingRequestParamMatchType =
     | 'equalTo'
@@ -67,6 +68,7 @@ export interface IMappingRequest {
     urlPattern?: string
     urlPath?: string
     urlPathPattern?: string
+    urlPathTemplate?: string
     queryParameters?: IMappingRequestParams
     headers?: IMappingRequestParams
     cookies?: IMappingRequestParams
