@@ -108,6 +108,7 @@ export const createMappingEpic: Epic<MappingsAction, any, IApplicationState> = (
                                 data: {
                                     serverName: server.name,
                                     mappingId: mapping.id,
+                                    name: mapping.name
                                 },
                             }
                         ),

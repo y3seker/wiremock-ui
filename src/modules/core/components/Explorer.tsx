@@ -82,6 +82,7 @@ class Explorer extends React.Component<IExplorerProps, IExplorerState> {
                     data: {
                         serverName: server.name,
                         mappingId: node.data.mappingId,
+                        name: node.data.name,
                     },
                 })
             }

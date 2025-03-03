@@ -10,12 +10,7 @@ export const mappingsContentTypes = [
     {
         id: 'mapping',
         renderButton: (context: IContentRenderContext<IData>) => {
-            return 'mapping'
-            /*
-            const mapping = mappingFromContent(app, content)
-
-            return `${mapping.request.method} ${mapping.request.url}`
-            */
+            return context.content.data!.name;
         },
         renderIcon: () => <MappingIcon/>,
         renderPane: (context: IContentRenderContext<IData>) => (

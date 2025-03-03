@@ -69,6 +69,7 @@ const mapStateToProps = (
                         data: {
                             serverName: server.name,
                             mappingId,
+                            name: mapping.name
                         },
                     })
                 }
