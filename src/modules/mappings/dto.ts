@@ -1,14 +1,13 @@
 import {
-    MappingRequestUrlMatchType,
     IMapping,
-    IMappingRequestParams,
-    IMappingRequestBodyPattern,
     IMappingFormValues,
+    IMappingRequestBodyPattern,
     IMappingRequestParamFormValue,
-    IMappingRequestBodyPatternFormValue,
+    IMappingRequestParams,
     IMappingResponseHeaderFormValue,
-    mappingRequestParamMatchTypes,
     mappingRequestBodyPatternMatchTypes,
+    mappingRequestParamMatchTypes,
+    MappingRequestUrlMatchType,
 } from './types'
 
 export const mappingRequestParamsToFormValue = (params?: IMappingRequestParams): IMappingRequestParamFormValue[] => {
@@ -37,7 +36,7 @@ export const mappingRequestBodyPatternsToFormValue = (bodyPatterns?: IMappingReq
     if (bodyPatterns === undefined || bodyPatterns.length === 0) {
         return bodyPatternsFormValue
     }
-    
+
     bodyPatterns.forEach(bodyPattern => {
         mappingRequestBodyPatternMatchTypes.forEach((matchType, index) => {
             if (bodyPattern[matchType] !== undefined) {
@@ -118,7 +117,8 @@ export const mappingToFormValues = (mapping: IMapping): IMappingFormValues => {
         proxyBaseUrl: mapping.response.proxyBaseUrl,
         scenarioName: mapping.scenarioName,
         requiredScenarioState: mapping.requiredScenarioState,
-        newScenarioState: mapping.newScenarioState
+        newScenarioState: mapping.newScenarioState,
+        metadata: mapping.metadata
     }
 }
 
@@ -180,7 +180,10 @@ export const mappingFormValuesToMapping = (formValues: IMappingFormValues): IMap
             fixedDelayMilliseconds: formValues.responseDelayMilliseconds,
             delayDistribution: formValues.responseDelayDistribution,
         },
-        persistent: formValues.persistent
+        persistent: formValues.persistent,
+        metadata: {
+            folder: formValues.metadata!.folder
+        }
     }
 
     return mapping

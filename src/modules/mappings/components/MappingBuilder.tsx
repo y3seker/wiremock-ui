@@ -10,6 +10,7 @@ import { Grid } from './builder/Builder_styled'
 import BuilderRequest from './builder/BuilderRequest'
 import BuilderResponse from './builder/BuilderResponse'
 import BuilderScenario from './builder/BuilderScenario'
+import BuilderMetadata from './builder/BuilderMetadata'
 
 interface IMappingBuilderProps {
     mapping: IMapping
@@ -26,6 +27,7 @@ interface IMappingBuilderState {
     isRequestOpened: boolean
     isResponseOpened: boolean
     isScenarioOpened: boolean
+    isMetadataOpened: boolean
     requestParamsType: 'query' | 'headers' | 'cookies' | 'body'
 }
 
@@ -52,6 +54,7 @@ class MappingBuilder extends React.Component<
             isRequestOpened: true,
             isResponseOpened: true,
             isScenarioOpened: true,
+            isMetadataOpened: true,
             requestParamsType: 'query',
         }
     }
@@ -86,6 +89,12 @@ class MappingBuilder extends React.Component<
             isScenarioOpened: !this.state.isScenarioOpened
         })
     }
+    
+    toggleMetadata = () => {
+        this.setState({
+            isMetadataOpened: !this.state.isMetadataOpened
+        })
+    }
 
     updateRequestParamsType = (requestParamsType: 'query' | 'headers' | 'cookies' | 'body') => {
         this.setState({ requestParamsType })
@@ -109,6 +118,7 @@ class MappingBuilder extends React.Component<
             isRequestOpened,
             isResponseOpened,
             isScenarioOpened,
+            isMetadataOpened,
             requestParamsType,
         } = this.state
 
@@ -189,7 +199,16 @@ class MappingBuilder extends React.Component<
                             onBlur={this.handleBlur}
                             sync={this.sync}
                         />
-                        
+                        <BuilderMetadata
+                            isOpened={isMetadataOpened}
+                            onToggle={this.toggleMetadata}
+                            values={values}
+                            touched={touched}
+                            errors={errors}
+                            onChange={handleChange}
+                            onBlur={this.handleBlur}
+                            sync={this.sync}
+                        />
                     </Builder>
                 </Content>
             </Container>

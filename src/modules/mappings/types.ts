@@ -124,7 +124,13 @@ export interface IMapping {
     persistent: boolean,
     scenarioName?: string,
     requiredScenarioState?: string,
-    newScenarioState?: string
+    newScenarioState?: string,
+    metadata?: IMappingMetadata
+}
+
+
+export interface IMappingMetadata {
+    folder?: string
 }
 
 export interface IMappingCollection {
@@ -178,4 +184,5 @@ export interface IMappingFormValues {
     scenarioName?: string,
     requiredScenarioState?: string,
     newScenarioState?: string
+    metadata?: IMappingMetadata
 }

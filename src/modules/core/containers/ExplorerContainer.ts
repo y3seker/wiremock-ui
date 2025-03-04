@@ -3,14 +3,14 @@ import { connect } from 'react-redux'
 import { panesCurrentContentsSelector, uuid } from 'edikit'
 import { ITreeNode } from '../components/Tree'
 import { IApplicationState } from '../../../store'
-import { loadServerMappings, getMappingUrl, IMapping } from '../../mappings'
+import { getMappingUrl, IMapping, loadServerMappings } from '../../mappings'
 import { IServer } from '../../servers'
 import Explorer from '../../../../src/modules/core/components/Explorer'
 
 const mapStateToProps = (
     {
         panes,
-        servers: { servers },
+        servers: {servers},
         mappings: serversMappings
     }: IApplicationState
 ): {
@@ -18,7 +18,7 @@ const mapStateToProps = (
     servers: IServer[]
 } => {
     const currentContentIds: string[] = panesCurrentContentsSelector(panes, 'default')
-        .map(({ id }) => id)
+        .map(({id}) => id)
 
     const tree: ITreeNode = {
         id: 'root',
@@ -37,6 +37,7 @@ const mapStateToProps = (
         }
 
         const mappings = serversMappings[server.name]
+
         if (mappings !== undefined) {
             const creationId = uuid()
             serverNode.children.push({
@@ -58,10 +59,49 @@ const mapStateToProps = (
                 },
                 children: [],
             }
+
+            const findFolderNode = (currentNode: ITreeNode, folderPath: string | undefined): ITreeNode | undefined => {
+                if (currentNode.id === `${server.name}.mappings.${folderPath}`) return currentNode;
+                if (currentNode.children === undefined) return undefined;
+                for (const child of currentNode.children!) {
+                    const res = findFolderNode(child, folderPath);
+                    if (res) return res;
+                }
+                return undefined;
+            }
+
+            const createFolderNode = (currentNode: ITreeNode, folderName: string, folderPath: string): ITreeNode => {
+                const node: ITreeNode = {
+                    id: `${server.name}.mappings.${folderPath}`,
+                    type: 'mappings',
+                    label: folderName,
+                    data: {
+                        serverName: server.name,
+                    },
+                    children: [],
+                }
+                currentNode.children!.push(node);
+                return node;
+            }
+
+            const addToFolder = (folder: string | undefined, mappingNode: ITreeNode) => {
+                let currentNode = mappingsNode;
+                folder!.split('/').forEach((folderName, index, array) => {
+                    const folderPath = array.filter((p, ix) => ix <= index).join('.');
+                    const folderNode = findFolderNode(currentNode, folderPath);
+                    if (!folderNode) {
+                        currentNode = createFolderNode(currentNode, folderName, folderPath)
+                    } else {
+                        currentNode = folderNode
+                    }
+                    if (index === array.length - 1) currentNode.children!.push(mappingNode)
+                })
+            }
+
             mappings.ids.forEach(mappingId => {
                 const mapping = mappings.byId[mappingId].mapping
                 if (mapping !== undefined) {
-                    mappingsNode.children!.push({
+                    const mappingNode = {
                         id: mappingId,
                         type: 'mapping',
                         label: mapping.name || `${mapping.request.method} ${getMappingUrl(mapping)}`,
@@ -71,12 +111,16 @@ const mapStateToProps = (
                             mappingId,
                             name: mapping.name
                         },
-                    })
+                    };
+                    if (hasFolder(mapping)) {
+                        addToFolder(mapping.metadata!.folder, mappingNode);
+                    } else {
+                        mappingsNode.children!.push(mappingNode)
+                    }
                 }
             })
             serverNode.children.push(mappingsNode)
         }
-
         tree.children!.push(serverNode)
     })
 
@@ -86,7 +130,15 @@ const mapStateToProps = (
         label: 'create server',
     })
 
-    return { tree, servers }
+    return {tree, servers}
+}
+
+function hasFolder(mapping: IMapping) {
+    return mapping.metadata
+        !== undefined
+        && mapping.metadata!.folder
+        !== undefined
+        && mapping.metadata!.folder!.length > 0
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
