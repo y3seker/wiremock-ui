@@ -21,7 +21,7 @@ class AppBar extends React.Component<IAppBarProps> {
     }
 
     visitGithub = () => {
-        window.open('https://github.com/plouc/wiremock-ui', '_blank')
+        window.open('https://github.com/y3seker/wiremock-ui', '_blank')
     }
 
     render() {
