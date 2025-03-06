@@ -2427,7 +2427,7 @@ ecc-jsbn@~0.1.1:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
 
-edikit@*:
+edikit@^1.0.0-alpha.4:
   version "1.0.0-alpha.4"
   resolved "https://registry.yarnpkg.com/edikit/-/edikit-1.0.0-alpha.4.tgz#66ae574d3c1037e07f6fa43ab6a4ea300d074e4b"
   integrity sha512-DVLuJo6Y9jfiqIe1k/ubZQzvPhik1660/px3mZlesj7jGzZS7Q8ioEML/28vcYtx7RHdsyG02mYmuH8yU3oQsw==
