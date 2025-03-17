@@ -97,6 +97,15 @@ const mapStateToProps = (
                     if (index === array.length - 1) currentNode.children!.push(mappingNode)
                 })
             }
+            const sortByName = (mappingNode: ITreeNode) => {
+                const children = mappingNode.children || [];
+                mappingNode.children = children.sort((a: ITreeNode, b: ITreeNode): number => {
+                    if (a.label > b.label) return 1;
+                    if (a.label < b.label) return -1;
+                    return 0;
+                })
+                children.forEach(child => sortByName(child))
+            }
 
             mappings.ids.forEach(mappingId => {
                 const mapping = mappings.byId[mappingId].mapping
@@ -119,6 +128,7 @@ const mapStateToProps = (
                     }
                 }
             })
+            sortByName(mappingsNode);
             serverNode.children.push(mappingsNode)
         }
         tree.children!.push(serverNode)
