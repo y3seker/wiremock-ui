@@ -54,7 +54,7 @@ export default class BuilderScenario extends React.Component<IBuilderScenarioPro
                             >Folder</label>
                             <Input
                                 id="metadata.folder"
-                                value={values.metadata!.folder}
+                                value={values.metadata && values.metadata!.folder}
                                 onChange={onChange}
                                 onBlur={onBlur}
                                 style={{

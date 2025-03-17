@@ -185,7 +185,7 @@ export const mappingFormValuesToMapping = (formValues: IMappingFormValues): IMap
         requiredScenarioState: formValues.requiredScenarioState,
         newScenarioState: formValues.newScenarioState,
         metadata: {
-            folder: formValues.metadata!.folder
+            folder: formValues.metadata && formValues.metadata!.folder
         }
     }
 
