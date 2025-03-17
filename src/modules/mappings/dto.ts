@@ -181,6 +181,9 @@ export const mappingFormValuesToMapping = (formValues: IMappingFormValues): IMap
             delayDistribution: formValues.responseDelayDistribution,
         },
         persistent: formValues.persistent,
+        scenarioName: formValues.scenarioName,
+        requiredScenarioState: formValues.requiredScenarioState,
+        newScenarioState: formValues.newScenarioState,
         metadata: {
             folder: formValues.metadata!.folder
         }
