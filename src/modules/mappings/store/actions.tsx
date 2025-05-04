@@ -58,6 +58,39 @@ export const loadServerMappingsSuccess = (
     }
 )
 
+export interface ILoadServerMappingsErrorAction {
+    type: MappingsActionTypes.LOAD_SERVER_MAPPINGS_ERROR
+    payload: {
+        serverName: string
+        server: IServer,
+        errorMessage: string
+    }
+}
+
+export const loadServerMappingsError = (
+    server: IServer,
+    errorMessage: string
+): ILoadServerMappingsErrorAction => action(
+    MappingsActionTypes.LOAD_SERVER_MAPPINGS_ERROR,
+    {
+        serverName: server.name,
+        server,
+        errorMessage
+    },
+    {
+        notification: {
+            type: 'danger',
+            content: (
+                <div>
+                    mappings could not loaded
+                    <div>{errorMessage}</div>
+                </div>
+            ),
+            ttl: 2000,
+        },
+    }
+)
+
 export interface IFetchMappingRequestAction {
     type: MappingsActionTypes.FETCH_MAPPING_REQUEST
     payload: {
@@ -96,6 +129,28 @@ export const fetchMappingSuccess = (
         serverName,
         mappingId,
         mapping,
+    }
+)
+
+export interface IFetchMappingErrorAction {
+    type: MappingsActionTypes.FETCH_MAPPING_ERROR
+    payload: {
+        serverName: string
+        mappingId: string
+        errorMessage: string
+    }
+}
+
+export const fetchMappingError = (
+    serverName: string,
+    mappingId: string,
+    errorMessage: string
+): IFetchMappingErrorAction => action(
+    MappingsActionTypes.FETCH_MAPPING_ERROR,
+    {
+        serverName,
+        mappingId,
+        errorMessage
     }
 )
 
@@ -171,6 +226,16 @@ export interface IUpdateMappingSuccessAction {
     }
 }
 
+export interface IUpdateMappingErrorAction {
+    type: MappingsActionTypes.UPDATE_MAPPING_ERROR
+    payload: {
+        serverName: string
+        mappingId: string
+        mapping: IMapping,
+        errorMessage: string
+    }
+}
+
 export const updateMappingSuccess = (
     serverName: string,
     mappingId: string,
@@ -188,6 +253,33 @@ export const updateMappingSuccess = (
             content: (
                 <div>
                     mapping <strong>{getMappingLabel(mapping)}</strong> successfully saved
+                </div>
+            ),
+            ttl: 2000,
+        },
+    }
+)
+
+export const updateMappingError = (
+    serverName: string,
+    mappingId: string,
+    mapping: IMapping,
+    errorMessage: string
+): IUpdateMappingErrorAction => action(
+    MappingsActionTypes.UPDATE_MAPPING_ERROR,
+    {
+        serverName,
+        mappingId,
+        mapping,
+        errorMessage,
+    },
+    {
+        notification: {
+            type: 'danger',
+            content: (
+                <div>
+                    mapping <strong>{getMappingLabel(mapping)}</strong> not saved.
+                    <div>{errorMessage}</div>
                 </div>
             ),
             ttl: 2000,
@@ -244,6 +336,40 @@ export const deleteMappingSuccess = (
     }
 )
 
+export interface IDeleteMappingErrorAction {
+    type: MappingsActionTypes.DELETE_MAPPING_ERROR
+    payload: {
+        serverName: string
+        mappingId: string,
+        errorMessage: string
+    }
+}
+
+export const deleteMappingError = (
+    serverName: string,
+    mappingId: string,
+    errorMessage: string
+): IDeleteMappingErrorAction => action(
+    MappingsActionTypes.DELETE_MAPPING_ERROR,
+    {
+        serverName,
+        mappingId,
+        errorMessage
+    },
+    {
+        notification: {
+            type: 'danger',
+            content: (
+                <div>
+                    mapping is not deleted
+                    <div>{errorMessage}</div>
+                </div>
+            ),
+            ttl: 2000,
+        },
+    }
+)
+
 export interface IInitCreateMappingAction {
     type: MappingsActionTypes.INIT_CREATE_MAPPING
     payload: {
@@ -272,7 +398,7 @@ export const initCreateMapping = (
             },
             persistent: false,
             metadata: {
-                folder: ""
+                folder: ''
             }
         }
     }
@@ -336,6 +462,46 @@ export const createMappingSuccess = (
     }
 )
 
+export interface ICreateMappingErrorAction {
+    type: MappingsActionTypes.CREATE_MAPPING_ERROR
+    payload: {
+        serverName: string
+        mappingId: string
+        creationId: string
+        mapping: IMapping,
+        errorMessage: string
+    }
+}
+
+export const createMappingError = (
+    serverName: string,
+    mappingId: string,
+    creationId: string,
+    mapping: IMapping,
+    errorMessage: string
+): ICreateMappingErrorAction => action(
+    MappingsActionTypes.CREATE_MAPPING_ERROR,
+    {
+        serverName,
+        mappingId,
+        creationId,
+        mapping,
+        errorMessage
+    },
+    {
+        notification: {
+            type: 'danger',
+            content: (
+                <div>
+                    mapping <strong>{getMappingLabel(mapping)}</strong> is not created
+                    <div>{errorMessage}</div>
+                </div>
+            ),
+            ttl: 2000,
+        },
+    }
+)
+
 export interface ICancelMappingCreationAction {
     type: MappingsActionTypes.CANCEL_CREATE_MAPPING
     payload: {
@@ -359,15 +525,20 @@ export type MappingsAction =
     | ILoadServerMappingsAction
     | ILoadServerMappingsRequestAction
     | ILoadServerMappingsSuccessAction
+    | ILoadServerMappingsErrorAction
     | IFetchMappingRequestAction
     | IFetchMappingSuccessAction
+    | IFetchMappingErrorAction
     | IInitMappingWorkingCopyAction
     | ISyncMappingWorkingCopyAction
     | IUpdateMappingRequestAction
     | IUpdateMappingSuccessAction
+    | IUpdateMappingErrorAction
     | IDeleteMappingRequestAction
     | IDeleteMappingSuccessAction
+    | IDeleteMappingErrorAction
     | IInitCreateMappingAction
     | ICreateMappingRequestAction
     | ICreateMappingSuccessAction
+    | ICreateMappingErrorAction
     | ICancelMappingCreationAction

@@ -8,6 +8,7 @@ export interface ITreeNode<Data=any> {
     isCurrent?: boolean
     data?: Data
     children?: Array<ITreeNode<Data>>
+    isLoading?: boolean
 }
 
 export type TreeIconGetter<Data> = (node: ITreeNode<Data>) => React.ReactNode

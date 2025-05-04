@@ -1,5 +1,5 @@
-import { uniq, cloneDeep } from 'lodash'
-import { ServersAction, ServersActionTypes, IServer } from '../../servers'
+import { cloneDeep, uniq } from 'lodash'
+import { IServer, ServersAction, ServersActionTypes } from '../../servers'
 import { MappingsActionTypes } from './types'
 import { MappingsAction } from './actions'
 import { IMapping } from '../types'
@@ -52,6 +52,12 @@ export const mappingReducer = (
                 mapping: action.payload.mapping,
             }
 
+        case MappingsActionTypes.FETCH_MAPPING_ERROR:
+            return {
+                ...state,
+                isFetching: false
+            }
+
         case  MappingsActionTypes.INIT_MAPPING_WORKING_COPY:
             return {
                 ...state,
@@ -61,7 +67,7 @@ export const mappingReducer = (
         case MappingsActionTypes.SYNC_MAPPING_WORKING_COPY:
             return {
                 ...state,
-                workingCopy: { ...action.payload.update },
+                workingCopy: {...action.payload.update},
             }
 
         case MappingsActionTypes.UPDATE_MAPPING_REQUEST:
@@ -77,11 +83,21 @@ export const mappingReducer = (
                 mapping: action.payload.mapping,
             }
 
+        case MappingsActionTypes.UPDATE_MAPPING_ERROR:
+            return {
+                ...state,
+                isUpdating: false,
+            }
 
         case MappingsActionTypes.DELETE_MAPPING_REQUEST:
             return {
                 ...state,
                 isDeleting: true,
+            }
+        case MappingsActionTypes.DELETE_MAPPING_ERROR:
+            return {
+                ...state,
+                isDeleting: false,
             }
 
         case MappingsActionTypes.CREATE_MAPPING_SUCCESS:
@@ -123,6 +139,12 @@ export const mappingCreationReducer = (
                 isCreating: false,
                 mapping: action.payload.mapping,
             }
+        case MappingsActionTypes.CREATE_MAPPING_ERROR:
+            return {
+                ...state,
+                isCreating: false,
+                mapping: action.payload.mapping,
+            }
 
         default:
             return state
@@ -146,16 +168,17 @@ export const mappingsByServerReducer = (
                 isLoading: true,
                 haveBeenLoaded: false,
             }
-
         case MappingsActionTypes.LOAD_SERVER_MAPPINGS_SUCCESS:
-            const { mappings } = action.payload
+            const {mappings} = action.payload
 
             return {
                 ...state,
                 isLoading: false,
                 haveBeenLoaded: true,
-                ids: uniq(mappings.map(({ id }) => id)),
-                byId: mappings.reduce((agg: { [mappingId: string]: IMappingState }, mapping: IMapping): { [mappingId: string]: IMappingState } => ({
+                ids: uniq(mappings.map(({id}) => id)),
+                byId: mappings.reduce((agg: { [mappingId: string]: IMappingState }, mapping: IMapping): {
+                    [mappingId: string]: IMappingState
+                } => ({
                     ...agg,
                     [mapping.id]: {
                         mapping,
@@ -166,13 +189,23 @@ export const mappingsByServerReducer = (
                 }), {}),
             }
 
+        case MappingsActionTypes.LOAD_SERVER_MAPPINGS_ERROR:
+            return {
+                ...state,
+                isLoading: false,
+                haveBeenLoaded: false,
+            }
+
         case MappingsActionTypes.FETCH_MAPPING_REQUEST:
         case MappingsActionTypes.FETCH_MAPPING_SUCCESS:
+        case MappingsActionTypes.FETCH_MAPPING_ERROR:
         case MappingsActionTypes.INIT_MAPPING_WORKING_COPY:
         case MappingsActionTypes.SYNC_MAPPING_WORKING_COPY:
         case MappingsActionTypes.UPDATE_MAPPING_REQUEST:
         case MappingsActionTypes.UPDATE_MAPPING_SUCCESS:
+        case MappingsActionTypes.UPDATE_MAPPING_ERROR:
         case MappingsActionTypes.DELETE_MAPPING_REQUEST:
+        case MappingsActionTypes.DELETE_MAPPING_ERROR:
             return {
                 ...state,
                 byId: {
@@ -272,17 +305,22 @@ export const mappingsReducer = (
 
         case MappingsActionTypes.LOAD_SERVER_MAPPINGS_REQUEST:
         case MappingsActionTypes.LOAD_SERVER_MAPPINGS_SUCCESS:
+        case MappingsActionTypes.LOAD_SERVER_MAPPINGS_ERROR:
         case MappingsActionTypes.FETCH_MAPPING_REQUEST:
         case MappingsActionTypes.FETCH_MAPPING_SUCCESS:
+        case MappingsActionTypes.FETCH_MAPPING_ERROR:
         case MappingsActionTypes.INIT_MAPPING_WORKING_COPY:
         case MappingsActionTypes.SYNC_MAPPING_WORKING_COPY:
         case MappingsActionTypes.UPDATE_MAPPING_REQUEST:
         case MappingsActionTypes.UPDATE_MAPPING_SUCCESS:
+        case MappingsActionTypes.UPDATE_MAPPING_ERROR:
         case MappingsActionTypes.DELETE_MAPPING_REQUEST:
         case MappingsActionTypes.DELETE_MAPPING_SUCCESS:
+        case MappingsActionTypes.DELETE_MAPPING_ERROR:
         case MappingsActionTypes.INIT_CREATE_MAPPING:
         case MappingsActionTypes.CREATE_MAPPING_REQUEST:
         case MappingsActionTypes.CREATE_MAPPING_SUCCESS:
+        case MappingsActionTypes.CREATE_MAPPING_ERROR:
         case MappingsActionTypes.CANCEL_CREATE_MAPPING:
             return {
                 ...state,

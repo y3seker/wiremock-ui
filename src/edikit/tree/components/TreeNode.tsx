@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { withTheme } from 'styled-components'
-import { Folder, ChevronRight, ChevronDown } from 'react-feather'
+import { Folder, ChevronRight, ChevronDown, Loader } from 'react-feather'
 import { Icons, Item, CurrentIndicator } from './TreeNode_styled'
 import { ITreeNode as Node, TreeClickHandler, TreeIconGetter } from '../'
 
@@ -39,6 +39,15 @@ class TreeNode<NodeData> extends React.Component<ITreeNodeProps<NodeData>> {
         if (icon === undefined && getIcon !== undefined) {
             icon = getIcon(node)
         }
+        if (icon === undefined && node.isLoading) {
+            icon = (
+                <Loader
+                    size={iconSize}
+                    style={{ flexShrink: 0 }}
+                />
+            )
+        }
+
         if (icon === undefined && node.children !== undefined) {
             icon = (
                 <Folder

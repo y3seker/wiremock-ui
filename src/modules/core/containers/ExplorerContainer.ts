@@ -11,7 +11,7 @@ const mapStateToProps = (
     {
         panes,
         servers: {servers},
-        mappings: serversMappings
+        mappings: serversMappings,
     }: IApplicationState
 ): {
     tree: ITreeNode
@@ -53,6 +53,7 @@ const mapStateToProps = (
             const mappingsNode: ITreeNode = {
                 id: `${server.name}.mappings`,
                 type: 'mappings',
+                isLoading: mappings.isLoading,
                 label: 'mappings',
                 data: {
                     serverName: server.name,
